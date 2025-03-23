@@ -75,6 +75,10 @@ button {
     margin: 10px;
     display: inline-block; /* Keeps buttons naturally spaced */
 }
+#issueChart{
+    max-height: 30%;
+    color: white;
+}
 
 button:hover {
     background-color: var(--accent-color);

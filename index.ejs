@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
     <link rel="stylesheet" href="/style2.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         .hidden {
@@ -14,10 +15,13 @@
     </style>
 </head>
 <body>
+
    <div class="flex-end"><img class="logo" src="/images.svg"><br /></div> 
     <% if (locals.userName) { %>
     <% } %>
     <% if(admin){ %>
+        <div id="pieDataContainer" data-pie='<%= JSON.stringify(pieList) %>'></div>
+
         <form action="/add/event" method="POST">
             <h1>Hi, <%- userName %> </h1>
 
@@ -39,7 +43,7 @@
                 </div>
         
             <% }); %>
-            <canvas id="issueChart"></canvas>
+            <canvas id="issueChart" width="100" height="100"></canvas>
         <% } else { %>
             <option value="">No events available</option>
         <% } %>
@@ -118,6 +122,58 @@
             }
         });
     }
+
+    </script>
+    <script> async function fetchPieData() {
+        try {
+            const response = await fetch("/api/pie-data");
+            const pieData = await response.json();
+
+            // Extract labels and values
+            const labels = pieData.map(item => item.typeof);
+            const data = pieData.map(item => item.count);
+
+            // Render Pie Chart
+            const ctx = document.getElementById("issueChart").getContext("2d");
+            new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: [
+                            "#FF5733", "#2C3E50", "#F4D03F", "#3498DB", "#E74C3C", 
+                            "#9B59B6", "#1ABC9C", "#34495E", "#95A5A6"
+                        ]
+                    }]
+                },
+                options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: "white", // Change legend font color
+                            font: {
+                                size: 14 // Optional: Change font size
+                            }
+                        }
+                    }
+                }
+            }
+            
+            });
+        } catch (error) {
+            console.error("Error fetching pie chart data:", error);
+        }
+    }
+
+    // Fetch and render the data when the page loads
+    fetchPieData();
+
+
+   
+
     </script>
 </body>
 </html>

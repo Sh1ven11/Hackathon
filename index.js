@@ -109,12 +109,14 @@ app.get("/index", async (req, res) => {
   try {
     const events = await db.query("SELECT * FROM events");
     const queries = await db.query("SELECT * FROM queryies WHERE done=$1", [false]);
-
+    const pie=await db.query("SELECT typeof, COUNT(*) AS count FROM queryies GROUP BY typeof ORDER BY count DESC")
+    console.log(pie.rows);
     res.render("index", {
       userName: req.session.user.username,
       admin: req.session.user.isAdmin,
       eventsList: events.rows,
       queriesList: queries.rows,
+      pieList:pie.rows,
       success: null,
       error: null,
     });
@@ -125,6 +127,7 @@ app.get("/index", async (req, res) => {
       admin: req.session.user.isAdmin,
       eventsList: [],
       queriesList: [],
+      pieList:[],
       error: "Could not fetch events.",
       success: null,
     });
@@ -200,6 +203,15 @@ app.post("/add/event", async (req, res) => {
       error: "Error adding event.",
       success: null,
     });
+  }
+});
+app.get("/api/pie-data", async (req, res) => {
+  try {
+      const pie = await db.query("SELECT typeof, COUNT(*) AS count FROM queryies GROUP BY typeof ORDER BY count DESC");
+      res.json(pie.rows); // Send JSON response
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error fetching pie chart data" });
   }
 });
 
