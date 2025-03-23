@@ -1,0 +1,116 @@
+/* ===================== */
+/* Color Scheme */
+:root {
+    --primary-color: #FF5733; /* Vibrant Orange-Red */
+    --secondary-color: #2C3E50; /* Dark Blue-Grey */
+    --accent-color: #F4D03F; /* Warm Yellow */
+    --background-color: #ECF0F1; /* Soft Grey-White */
+    --text-color: #333; /* Dark Grey for readability */
+    --success-color: #27AE60; /* Green for success (Resolved button) */
+}
+
+/* ===================== */
+/* General Styles */
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+/* Headings */
+h1 {
+    color: var(--secondary-color);
+    font-weight: 350;
+}
+h2 ,h3{
+    color: var(--secondary-color);
+    font-weight: 350;
+}
+
+/* ===================== */
+/* Form Styling */
+form {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 350px; /* Compact form */
+    margin: 20px auto; /* Center form */
+    text-align: left;
+}
+
+label {
+    font-weight: 500;
+    color: var(--secondary-color);
+}
+
+input, select, textarea {
+    width: 90%; /* More natural width */
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid var(--secondary-color);
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+textarea {
+    resize: none;
+}
+
+/* ===================== */
+/* Buttons */
+button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    width: auto; /* Prevents full-width buttons */
+    margin: 10px;
+    display: inline-block; /* Keeps buttons naturally spaced */
+}
+
+button:hover {
+    background-color: var(--accent-color);
+    color: black;
+}
+
+/* Resolved Button */
+button.resolved-btn {
+    background-color: var(--success-color); /* Green */
+    font-size: 14px;
+    padding: 8px 12px;
+}
+
+button.resolved-btn:hover {
+    background-color: #1F8A50; /* Darker green on hover */
+}
+
+/* ===================== */
+/* Query List Styling */
+.query-container {
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px auto;
+    max-width: 600px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Link Styling */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--accent-color);
+}

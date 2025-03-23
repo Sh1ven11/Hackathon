@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="/style2.css">
+
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <% if (locals.userName) { %>
+    <h1>Hi, <%- userName %> </h1>
+    <% } %>
+    <% if(admin){ %>
+        <form action="/add/event" method="POST">
+            <h2>Add Events</h2>
+            <input type="text" name="EVENT" required><br />
+        <button action ="submit">Submit</button>
+        </form>
+        <% if (locals.error){ %>
+            <h1>Already exists</h1>
+            <% } %>
+    
+        <button onclick="reloadData()">Reload QueryList</button>
+
+        <% if (locals.queriesList && queriesList.length > 0) { %>
+            <% queriesList.forEach((query) => { %>
+                <div class="query-container">
+                    <p>Event: <%- query.events %> | Type: <%- query.typeof %> | More info: <%- query.moreinfo %> | Phone: <%- query.phone %></p>
+                    <button class="resolved-btn" onclick="deleteQuery('<%= query.query_id %>')">Resolved</button>
+                </div>
+        
+            <% }); %>
+            <canvas id="issueChart"></canvas>
+        <% } else { %>
+            <option value="">No events available</option>
+        <% } %>
+    <% } %>
+    <% if(!admin){ %>
+    
+    
+    <div id="myForm" class="" >
+        <form action="/index/submit" id="form" method="POST">
+            <label for="hide" >Anonymous?</label>
+            <select name="hide" class="form-select">
+                <option value="0">NO</option>
+                <option value="1">YES</option>
+            </select><br />
+
+            <label for="event">Select Event</label>
+            <select name="event">
+                <% if (eventsList && eventsList.length > 0) { %>
+                    <% eventsList.forEach((event, index) => { %>
+                        <option value="<%= event.eventname %>"><%= event.eventname %></option>
+                    <% }); %>
+                <% } else { %>
+                    <option value="">No events available</option>
+                <% } %>
+            </select><br />
+            
+
+            
+            <label>Type of problem</label>
+            <select name="type">
+                <option value="0">Audio/Visual Issue</option>
+                <option value="1">Food and Water</option>
+                <option value="2">Wi-Fi/Internet Issue</option>
+                <option value="3">Delayed Event Schedule</option>
+                <option value="4">Food/Water Shortage</option>
+                <option value="5">Fire Hazard</option>
+                <option value="6">Insufficient Seating/Blocked View</option>
+                <option value="7">Hygiene Issues</option>
+                <option value="8">Other</option>
+
+
+            </select>
+            <br />
+            <textarea id="title" name="moreInfo" rows="3" cols="50" placeholder="Can you give more info"></textarea>
+            <br />
+            <button action="submit" >Submit</button>
+        </form>
+    </div>
+    <% if (locals.success){ %>
+        <script>
+            document.getElementById("myForm").classList.add("hidden"); // Hide form
+            
+        </script>
+        <h3><%- success%></h3>
+        <button id="reloadButton" onclick="rload()">One more?</button>
+        <% } %>
+    <% } %>
+    <script>
+        
+        function rload(){
+            document.getElementById("myForm").classList.remove("hidden"); // Hide form
+            document.getElementById("reloadButton").remove(); // Remove the button
+
+            
+        }
+        function deleteQuery(queryId) {
+        fetch(`/delete/query/${queryId}`, {
+            method: "DELETE"
+        }).then(response => {
+            if (response.ok) {
+                location.reload(); // Refresh page after deletion
+            } else {
+                alert("Error deleting query");
+            }
+        });
+    }
+    </script>
+</body>
+</html>
