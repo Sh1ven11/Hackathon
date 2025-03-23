@@ -58,7 +58,13 @@ app.post("/register", async (req, res) => {
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
   const phone = req.body.Phone;
   const admin = adminpass === req.body.adminPassword;
-
+  if (admin){
+    try{
+      await   db.query("UPDATE queryies SET admin_name = $1",[null]);
+    }catch(error){
+      console.log(error);
+    }
+  }
   try {
     await db.query(
       "INSERT INTO users (username, password, userPhone, is_admin) VALUES ($1, $2, $3, $4)",
@@ -101,31 +107,85 @@ app.post("/old", async (req, res) => {
     res.render("olduser", { error: "Internal server error", success: null });
   }
 });
-
+var q_no=0;
+var a_no=0;
 app.get("/index", async (req, res) => {
   if (!req.session.user) {
     return res.redirect("/old");
   }
   try {
+    const querie_ALL = await db.query("SELECT * FROM queryies ");
+    const queries = await db.query("SELECT * FROM queryies WHERE done = $1 AND admin_name=$2 ", [false,req.session.user.username]);
+
     const events = await db.query("SELECT * FROM events");
-    const queries = await db.query("SELECT * FROM queryies WHERE done=$1", [false]);
+    const admins = await db.query("SELECT username, userphone FROM users WHERE is_admin = $1", [true]);
+const length = admins.rows.length;
+console.log("Number of admins:", length);
+
+// Ensure admins exist
+if (length === 0) {
+    console.error("No admins available!");
+    return;
+}
+
+// Debugging admin list
+console.log(admins.rows);
+
+
+// Fetch pending queries
+// Fetch pie chart data
+
+// Iterate through queries and assign admin if `admin_name` is NULL
+for (const element of querie_ALL.rows) {
+  if (element.admin_name == null) {
+      try {
+        a_no = (a_no + 1) % length; // Rotate through available admins
+        if (a_no==0){
+          a_np+=1;
+        }
+          await db.query(
+              "UPDATE queryies SET admin_name = $1 WHERE query_id = $2",
+              [admins.rows[a_no].username, element.query_id]
+          );
+      } catch (error) {
+          console.error("Error updating query:", error);
+      }
+  }
+}
+
     const pie=await db.query("SELECT typeof, COUNT(*) AS count FROM queryies GROUP BY typeof ORDER BY count DESC")
+
     console.log(pie.rows);
+    if(req.session.user.username=="admin"){
+
     res.render("index", {
       userName: req.session.user.username,
       admin: req.session.user.isAdmin,
       eventsList: events.rows,
-      queriesList: queries.rows,
+      queries_personal:querie_ALL.rows,
+      queriesList: querie_ALL.rows,
       pieList:pie.rows,
       success: null,
       error: null,
     });
+    }else{
+    res.render("index", {
+      userName: req.session.user.username,
+      admin: req.session.user.isAdmin,
+      eventsList: events.rows,
+      queries_personal:queries.rows,
+      queriesList: queries.rows,
+      pieList:pie.rows,
+      success: null,
+      error: null,
+    });}
   } catch (error) {
     console.error(error);
     res.render("index", {
       userName: req.session.user.username,
       admin: req.session.user.isAdmin,
       eventsList: [],
+      queries_personal:[],
       queriesList: [],
       pieList:[],
       error: "Could not fetch events.",

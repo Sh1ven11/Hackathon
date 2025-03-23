@@ -35,7 +35,7 @@
     
         <button onclick="reloadData()">Reload QueryList</button>
 
-        <% if (locals.queriesList && queriesList.length > 0) { %>
+        <% if (locals.queries_personal && queries_personal.length > 0) { %>
             <% queriesList.forEach((query) => { %>
                 <div class="query-container">
                     <p>Event: <%- query.events %> | Type: <%- query.typeof %> | More info: <%- query.moreinfo %> | Phone: <%- query.phone %></p>
