@@ -39,7 +39,7 @@ form {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 350px; /* Compact form */
-    margin: 50px auto; /* Center form */
+    margin: 30px auto; /* Center form */
     text-align: left;
 }
 
@@ -81,7 +81,17 @@ button:hover {
     color: black;
 }
 
-
+.flex-end{
+  display: flex;
+  justify-content: center;
+    
+}
+.logo{
+    height:100px;
+    border-radius: 5px;
+    margin: 20px;
+    margin-bottom: 0px;
+}
 
 /* ===================== */
 /* Query List Styling */
