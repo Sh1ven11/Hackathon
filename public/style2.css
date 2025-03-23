@@ -12,7 +12,10 @@
 /* ===================== */
 /* General Styles */
 body {
-    background-color: var(--background-color);
+    background: #b92b27;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #1565C0, #b92b27);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #1565C0, #b92b27); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
     color: var(--text-color);
     font-family: "Poppins", sans-serif;
     margin: 0;
@@ -20,14 +23,10 @@ body {
     text-align: center;
 }
 
-/* Headings */
-h1 {
+
+h1,h2 ,h3{
     color: var(--secondary-color);
-    font-weight: 350;
-}
-h2 ,h3{
-    color: var(--secondary-color);
-    font-weight: 350;
+    font-weight: 250;
 }
 
 /* ===================== */
@@ -35,10 +34,12 @@ h2 ,h3{
 form {
     background: white;
     padding: 20px;
+    font-weight: 250;
+    padding-top: 5px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 350px; /* Compact form */
-    margin: 20px auto; /* Center form */
+    margin: 50px auto; /* Center form */
     text-align: left;
 }
 
@@ -80,16 +81,7 @@ button:hover {
     color: black;
 }
 
-/* Resolved Button */
-button.resolved-btn {
-    background-color: var(--success-color); /* Green */
-    font-size: 14px;
-    padding: 8px 12px;
-}
 
-button.resolved-btn:hover {
-    background-color: #1F8A50; /* Darker green on hover */
-}
 
 /* ===================== */
 /* Query List Styling */
